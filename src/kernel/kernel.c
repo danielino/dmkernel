@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "kernel/terminal.h"
 #include "kernel/timer.h"
+#include "kernel/utils/printk.h"
 #include "drivers/keyboard.h"
 #include "arch/x86/idt.h"
 #include "arch/x86/pic.h"
@@ -33,7 +34,7 @@ void init_irq(){
 void kernel_main() {
     terminal_initialize();
 
-    terminal_write("Kernel started\n");
+    printk(KERN_INFO "Kernel started\n");
 
     /*
      * Initialize interrupt system
@@ -46,7 +47,7 @@ void kernel_main() {
     init_irq();
     asm volatile("sti");
 
-    terminal_write("Waiting for command...\n");
+    printk(KERN_INFO "Waiting for command...\n");
 
     /*
      * This will trigger interrupt 0
