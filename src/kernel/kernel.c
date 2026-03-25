@@ -8,6 +8,7 @@
 #include "arch/x86/pic.h"
 #include "arch/x86/io.h"
 #include "arch/x86/irq.h"
+#include "mm/pmm.h"
 
 /*
  * This function is called from assembly when
@@ -33,15 +34,19 @@ void init_irq(){
 }
 
 void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
+    // it must be the first function call of the function scope
     terminal_initialize();
 
     if (magic != MULTIBOOT_MAGIC) {
         printk(KERN_ERR "Invalid multiboot magic: %x\n", magic);
         while (1);
     }
-
     printk(KERN_INFO "Memory lower: %d KB\n", mbi->mem_lower);
     printk(KERN_INFO "Memory upper: %d KB\n", mbi->mem_upper);
+
+    // initialize pmm
+    pmm_init(mbi);
+
 
     printk(KERN_INFO "Kernel started\n");
 
