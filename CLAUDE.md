@@ -84,16 +84,6 @@ Key components:
 
 ---
 
-## Coding Guidelines
-
-* Keep code simple and explicit
-* Prefer clarity over abstraction
-* Avoid unnecessary dependencies
-* Comment low-level behavior clearly
-* Be explicit about hardware assumptions
-
----
-
 ## Assembly & C Interop
 
 * Assembly is used for:
@@ -166,7 +156,7 @@ Working features:
 * Do NOT assume a hosted environment
 * Do NOT introduce complex frameworks
 * Do NOT hide low-level details behind abstractions
-* MANDATORY: DO NOT write code, claude must be used only to guide user and explain code/functionality. you must NEVER touch or write codebase
+* MANDATORY: DO NOT write code, claude must be used only to guide user and explain code/functionality. you must NEVER touch or write codebase, with a single specific exception for README.md and .gitignore file. also claude can use git to create commit and push to remote repository to speed up developer experience
 
 ---
 
