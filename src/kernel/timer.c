@@ -4,7 +4,7 @@
 
 static uint32_t tick = 0;
 
-void irq0_handler() {
+void timer_irq_handler() {
     tick++;
     pic_send_eoi(0);
 }

@@ -34,7 +34,7 @@ static const char scancode_map_shift[] = {
 
 static int shift_pressed = 0;               
                                           
-void irq1_handler() {
+void keyboard_irq_handler() {
     uint8_t scancode = inb(0x60);                                                                                                                                                             
                                             
     if (scancode == 0x2A || scancode == 0x36) {                                                                                                                                               

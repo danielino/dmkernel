@@ -1,1 +1,1 @@
-void irq0_handler();
+void timer_irq_handler();
