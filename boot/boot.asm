@@ -9,6 +9,8 @@ global _start
 
 _start:
     extern kernel_main
+    push ebx
+    push eax
     call kernel_main
 
 .hang:

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "multiboot.h"
 #include "kernel/terminal.h"
 #include "kernel/timer.h"
 #include "kernel/utils/printk.h"
@@ -31,8 +32,16 @@ void init_irq(){
     pic_unmask_irq(1); // enable keyboard at irq1
 }
 
-void kernel_main() {
+void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
     terminal_initialize();
+
+    if (magic != MULTIBOOT_MAGIC) {
+        printk(KERN_ERR "Invalid multiboot magic: %x\n", magic);
+        while (1);
+    }
+
+    printk(KERN_INFO "Memory lower: %d KB\n", mbi->mem_lower);
+    printk(KERN_INFO "Memory upper: %d KB\n", mbi->mem_upper);
 
     printk(KERN_INFO "Kernel started\n");
 
