@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "kernel/terminal.h"
 #include "drivers/vga.h"
+#include "arch/x86/io.h"
 
 static size_t row;
 static size_t col;
@@ -14,20 +15,32 @@ void terminal_initialize(){
     vga_clear(color);
 }
 
+void terminal_update_cursor(void) {
+      uint16_t pos = row * 80 + col;
+      outb(0x3D4, 0x0F);
+      outb(0x3D5, (uint8_t)(pos & 0xFF));
+      outb(0x3D4, 0x0E);
+      outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+  }
+
 void terminal_putchar(char c) {
     if (c == '\n') {
         col = 0;
         row++;
-        return;
+    } else if (c == '\b') {
+        if (col > 0) {
+            col--;
+            vga_putentry_at(' ', color, col, row);
+        }
+    } else {
+        vga_putentry_at(c, color, col, row);
+        col++;
+        if (col >= 80) {
+            col = 0;
+            row++;
+        }
     }
-
-    vga_putentry_at(c, color, col, row);
-    col++;
-
-    if (col >= 80) {
-        col = 0;
-        row++;
-    }
+    terminal_update_cursor();
 }
 
 void terminal_write(const char* str) {

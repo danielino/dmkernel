@@ -5,6 +5,9 @@
 #include "arch/x86/pic.h"
 #include "arch/x86/io.h"
 
+#define KEYBOARD_BUFF_SIZE 0xFF
+static char buffer[KEYBOARD_BUFF_SIZE];
+static int buf_len = 0;
 
 static const char scancode_map[] = {        
     0,   0,   '1', '2', '3', '4', '5', '6',
@@ -44,19 +47,41 @@ void irq1_handler() {
         pic_send_eoi(1);                
         return;                                                                                                                                                                               
     }                                                                                                                                                                                         
-                                                                    
+                            
+    // key release events
     if (scancode & 0x80) {                                                                                                                                                                    
         pic_send_eoi(1);                                                                                                                                                                    
         return;                                                      
-    }                                                                                                                                                                                         
+    }           
 
+    // backspace
+    if(scancode == 0x0E){
+        if (buf_len > 0){
+            buf_len--;
+            terminal_write("\b");
+        }
+        pic_send_eoi(1);
+        return;
+    }
+
+    // enter
+    if(scancode == 0x1C){
+        terminal_write("\n"); 
+        pic_send_eoi(1);
+        return;
+    }
+
+    char c = 0;
     if (scancode < sizeof(scancode_map)) {                                                                                                                                                    
-        char c = shift_pressed ? scancode_map_shift[scancode] : scancode_map[scancode];                                                                                                     
+        c = shift_pressed ? scancode_map_shift[scancode] : scancode_map[scancode];                                                                                                     
         if (c != 0) {                                                
-            char buf[2] = {c, 0};       
-            terminal_write(buf);
+            buffer[buf_len++] = c;
+            buffer[buf_len] = '\0';
+            char buf[2] = {c, 0};
+            terminal_write(buf); 
         }                                                                                                                                                                                     
-    }                                       
+    }
+                                      
                                                                                                                                                                                             
     pic_send_eoi(1);                                                                                                                                                                        
 }   

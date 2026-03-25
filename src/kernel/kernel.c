@@ -20,6 +20,11 @@ void isr0_handler() {
     while (1);
 }
 
+void init_irq(){
+    pic_init();
+    pic_unmask_irq(0); // enable timer at irq0
+    pic_unmask_irq(1); // enable keyboard at irq1
+}
 
 void kernel_main() {
     terminal_initialize();
@@ -34,9 +39,7 @@ void kernel_main() {
     /*
      * initialize pic
      */
-    pic_init();
-    pic_unmask_irq(0); // enable timer at irq0
-    pic_unmask_irq(1); // enable keyboard at irq1
+    init_irq();
     asm volatile("sti");
 
     terminal_write("Waiting for command...\n");
