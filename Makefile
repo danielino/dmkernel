@@ -52,7 +52,7 @@ $(BUILD_DIR)/kernel.iso: $(BUILD_DIR)/kernel.bin
 
 # ▶️ run
 run: $(BUILD_DIR)/kernel.iso
-	qemu-system-x86_64 -cdrom $<
+	qemu-system-x86_64 -m 512 -cdrom $<
 
 # 🧹 clean
 clean:
