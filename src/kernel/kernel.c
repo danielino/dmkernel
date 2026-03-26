@@ -9,6 +9,7 @@
 #include "arch/x86/io.h"
 #include "arch/x86/irq.h"
 #include "mm/pmm.h"
+#include "mm/vmm.h"
 
 /*
  * This function is called from assembly when
@@ -46,6 +47,7 @@ void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
 
     // initialize pmm
     pmm_init(mbi);
+    vmm_init();
 
 
     printk(KERN_INFO "Kernel started\n");
