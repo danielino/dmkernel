@@ -9,6 +9,9 @@
 static char buffer[KEYBOARD_BUFF_SIZE];
 static int buf_len = 0;
 
+// 1 when press enter
+static int line_ready = 0;
+
 static const char scancode_map[] = {        
     0,   0,   '1', '2', '3', '4', '5', '6',
     '7', '8', '9', '0', '\'','i', 0,   0,   
@@ -66,6 +69,7 @@ void keyboard_irq_handler() {
 
     // enter
     if(scancode == 0x1C){
+        line_ready = 1;
         terminal_write("\n"); 
         pic_send_eoi(1);
         return;
@@ -85,3 +89,17 @@ void keyboard_irq_handler() {
                                                                                                                                                                                             
     pic_send_eoi(1);                                                                                                                                                                        
 }   
+
+int keyboard_line_ready(void){
+    return line_ready;
+}
+
+void keyboard_readline(char *out, int max){
+    int len = buf_len < max - 1 ? buf_len : max - 1;
+    for(int i = 0; i < len; i++)
+        out[i] = buffer[i];
+
+    out[len] = '\0';
+    buf_len = 0;
+    line_ready = 0;
+}

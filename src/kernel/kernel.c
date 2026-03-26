@@ -2,6 +2,7 @@
 #include "multiboot.h"
 #include "kernel/terminal.h"
 #include "kernel/timer.h"
+#include "kernel/shell.h"
 #include "kernel/utils/printk.h"
 #include "drivers/keyboard.h"
 #include "arch/x86/idt.h"
@@ -72,5 +73,5 @@ void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
      */
     //asm volatile("int $0"); 
 
-    while (1);
+    shell_run();
 }

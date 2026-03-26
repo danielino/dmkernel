@@ -48,3 +48,12 @@ void terminal_write(const char* str) {
         terminal_putchar(str[i]);
     }
 }
+
+void terminal_clear(void){
+    for(int r = 0; r < 25; r++)
+        for(int c = 0; c < 80; c++)
+            vga_putentry_at(' ', color, c, r);
+    row = 0;
+    col = 0;
+    terminal_update_cursor();
+}
