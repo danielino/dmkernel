@@ -47,7 +47,7 @@ void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
     printk(KERN_INFO "Memory lower: %d KB\n", mbi->mem_lower);
     printk(KERN_INFO "Memory upper: %d KB\n", mbi->mem_upper);
 
-    // initialize pmm
+    // initialize memory management
     pmm_init(mbi);
     vmm_init();
     heap_init();
@@ -60,6 +60,7 @@ void kernel_main(uint32_t magic, multiboot_info_t *mbi) {
      */
     idt_init();
 
+    timer_init();
     /*
      * initialize pic
      */

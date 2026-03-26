@@ -83,3 +83,7 @@ void pmm_free_frame(void *addr){
 uint32_t pmm_free_frames(void){
     return free_frames;
 }
+
+uint32_t pmm_total_frames(void) {                                                                                                                                                             
+    return total_frames;                                                                                                                                                                      
+}  

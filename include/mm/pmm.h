@@ -10,5 +10,6 @@ void pmm_init(multiboot_info_t *mbi);
 void *pmm_alloc_frame(void); // frame allocation, return physical addr
 void pmm_free_frame(void *addr);
 uint32_t pmm_free_frames(void);
+uint32_t pmm_total_frames(void);
 
 #endif
