@@ -3,6 +3,7 @@
 #include "kernel/terminal.h"
 #include "drivers/vga.h"
 #include "arch/x86/io.h"
+#include "kernel/utils/string.h"
 
 static size_t row;
 static size_t col;
@@ -13,6 +14,17 @@ void terminal_initialize(){
     col = 0;
     color = 0x0F;
     vga_clear(color);
+}
+
+static void terminal_scroll() {                                                                                                                                                               
+    if (row < 25) return;                                                                                                                                                                     
+    uint16_t *buf = (uint16_t *)0xB8000;                                                                                                                                                    
+    // sposta tutto su di una riga                                                                                                                                                            
+    memcpy(buf, buf + 80, 80 * 24 * 2);                                                                                                                                                       
+    // pulisci ultima riga                                                                                                                                                                    
+    for (int c = 0; c < 80; c++)                                                                                                                                                              
+        vga_putentry_at(' ', color, c, 24);                                                                                                                                                   
+    row = 24;                                                        
 }
 
 void terminal_update_cursor(void) {
@@ -27,6 +39,7 @@ void terminal_putchar(char c) {
     if (c == '\n') {
         col = 0;
         row++;
+        terminal_scroll();
     } else if (c == '\b') {
         if (col > 0) {
             col--;
@@ -38,6 +51,7 @@ void terminal_putchar(char c) {
         if (col >= 80) {
             col = 0;
             row++;
+            terminal_scroll();
         }
     }
     terminal_update_cursor();

@@ -2,7 +2,7 @@
 #include "multiboot.h"
 #include "kernel/terminal.h"
 #include "kernel/timer.h"
-#include "kernel/shell.h"
+#include "kernel/shell/shell.h"
 #include "kernel/utils/printk.h"
 #include "drivers/keyboard.h"
 #include "arch/x86/idt.h"
